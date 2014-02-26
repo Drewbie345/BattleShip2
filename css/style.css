@@ -1,0 +1,52 @@
+@import url(http://fonts.googleapis.com/css?family=Sigmar+One);
+
+body {
+  background-color: #3311aa;
+  font-family: 'Sigmar One';
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.scrollblock {
+  margin: 0;
+  width: 100%;
+  height: 600px;
+}
+
+h1 {
+  font-size: 7em;
+}
+
+h2 {
+  font-size: 4em;
+}
+
+#title {
+  margin-left: 1.5em;
+}
+
+#subtitle {
+  font-size: 1.5em;
+  float: right;
+  margin-right: 6em;
+  margin-top: 0;
+}
+
+/* Battleship Game */
+#svg1 {
+  margin: 1em 2em 1em 12em;
+  float: left;
+}
+
+#svg2 {
+  margin: 1em;
+  float: left;
+}
+
+.disable {
+  pointer-events: none;
+}
