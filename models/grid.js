@@ -6,6 +6,7 @@ var createGrid = function(canvasId){
     y: 0
   };
 
+  var boxes = [];
   for (var i = 0; i <= 375; i += 25) {
     for (var k = 0; k <= 400; k += 25) {
       var m = 25 + i;
@@ -15,11 +16,13 @@ var createGrid = function(canvasId){
         stroke: 'black',
         strokeWidth: 2
       })
+      boxes.push(box);
     }
   }
   return {
     canvas: s,
     gridSize: gridSize,
-    origin: orig
+    origin: orig,
+    boxes: boxes
   }
 }

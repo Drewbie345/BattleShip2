@@ -1,20 +1,62 @@
 (function () {
-  
+
   var Ship = function () {
 
     this.playerShips = [];
 
     this.computerShips = [];
 
-    this.undragPlayerShips = function(){
+    this.createAvailableSpaces = function() {
+      var gridArray = [];
+
+      for (var i = 0; i < 16; i += 1) {
+        for (var k = 0; k < 16; k += 1) {
+          gridArray.push([i, k]);
+        }
+      }
+
+      var available = {};
+      for (var i = 0; i < gridArray.length; i++) {
+        available[gridArray[i]] = false;
+      }
+      return available;
+    }
+
+    this.availablePlayerSpace = this.createAvailableSpaces();
+
+    this.undragPlayerShips = function() {
       for (var i = 0; i < this.playerShips.length; i++) {
         this.playerShips[i].undrag();
+        var shipCoords = util.convertToPath(this.playerShips[i]);
+        var newShip = util.drawPathFromCoordinates(shipCoords);
       }
-    },
+    }
 
-    this.placeShip = function(width, type) {
+    this.outOfBounds = function() {
+
+    }
+
+    this.repositionShips = function() {
+
+    }
+
+    this.overlappingShips = function() {
+      for (var k = 0; k < this.playerShips.length; k++) {
+        for (var i = 0; i < this.playerShips.length; i++) {
+          if (Snap.path.isBBoxIntersect(this.playerShips[i].getBBox(), this.playerShips[k].getBBox()) === true) {
+            if (i !== k && i < k) {
+              console.log("I'm overlapping!");
+            }
+          }    
+        }
+      }
+    }
+
+    this.placeShip = function(x, y, width, type) {
       var ship;
-      var array = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375];
+      // var playerShipsObject = this.availableSpace();
+      //var computerShipsObject = this.availableSpace();
+      // var array = this.gridKey();
       var svgId = '';
       
       if (type === 'player') {
@@ -23,12 +65,32 @@
       else {
         svgId = '#svg2'
       }
-      var grid = createGrid(svgId);
-      var x = array[util.randInt(0, 15)];
-      var y = array[util.randInt(0, 15)];
 
+      var grid = createGrid(svgId);
+      
+      // var position = this.availablePlayerSpace[util.randInt(0, 255)];
+      // var x = position[0];
+      // var y = position[1];
+      // var blocks = width / 25;
+      
       if (type === 'player') {
-        ship =  grid.canvas.rect(x, y, width, 25);
+        
+        // Check if space is available
+
+        if (this.availablePlayerSpace[x + ',' + y] === false) {
+          this.availablePlayerSpace[x + ',' + y] = true; 
+          ship = grid.canvas.rect((x * 25), (y * 25), (width * 25), 25);
+        }
+        
+        
+
+        // Mult x and y by something to get pixel size
+       
+        
+        // for (var i = 1; i < blocks + 1; i++) {
+          // x += (i * 25);
+        // }
+
         ship.drag(
           function (dx, dy, x, y, e) {
             var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
@@ -47,20 +109,24 @@
         this.playerShips.push(ship);
       }
       else {
-        var x1 = x + width;
+        // computerShipsObject[x,y] = true;
+        x = x * 25;
+        y = y * 25;
+        var x1 = x + (width * 25);
         var y1 = y + 25;
         ship = grid.canvas.path('M' + x + ',' + y + 'L' + x1 + ',' + y + 'L' + x1 + ',' + y1 + 'L' + x + ',' + y1 + ',z');
         ship.attr('fill', 'black');
         this.computerShips.push(ship);
       }
-
       return {
         grid: grid,
-        ship: ship
+        ship: ship,
+        // availablePlayerSpace: playerShipsObject,
+        //availableComputerSpace: computerShipsObject
       }
     };
+
   };
 
   window.ships = new Ship();
-
 })();

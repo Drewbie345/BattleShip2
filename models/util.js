@@ -8,8 +8,8 @@
     },
 
     convertToPath: function(rect) {
-      var width = rect.getBBox().width();
-      var height = rect.getBBox().height();
+      var width = rect.getBBox().width;
+      var height = rect.getBBox().height;
       var x = rect.getBBox().x;
       var y = rect.getBBox().y;
       var coordinates = [];
@@ -26,7 +26,7 @@
         path += "L" + coordinates[i][0] + ", " + coordinates[i][1];
       }
       path += ",z";
-      var p = placeShip.grid.path(path);
+      var p = createGrid('#svg1').canvas.path(path);
       return p;
     }
   };
