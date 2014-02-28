@@ -79,7 +79,12 @@
 
         if (this.availablePlayerSpace[x + ',' + y] === false) {
           this.availablePlayerSpace[x + ',' + y] = true; 
-          ship = grid.canvas.rect((x * 25), (y * 25), (width * 25), 25);
+          var blocks = [];
+          for (var i = 0; i < width; i++){
+            blocks[i] = grid.canvas.rect((x * 25), (y * 25), 25, 25);
+            x++;
+          }
+          ship = grid.canvas.g(blocks.join(' '));
         }
         
         

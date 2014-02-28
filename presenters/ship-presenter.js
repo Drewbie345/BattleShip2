@@ -17,9 +17,6 @@ $(document).ready(function(){
   $('#button').click(function(e){
     e.preventDefault();
     ships.undragPlayerShips();
-    ships.overlappingShips();
-    ships.repositionShips();
-    console.log(ships.availablePlayerSpace)
   })
 })
     
