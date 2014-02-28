@@ -35,24 +35,11 @@
     }
 
     this.outOfBounds = function() {
-
+      for (var i = 0; i <= this.playerShips.length; i++) {
+        var xValue = this.placeShips[i].x;
+        var yValue = this.placeShips[i].y;
+      }
     }
-
-    this.repositionShips = function() {
-
-    }
-
-    // this.overlappingShips = function() {
-    //   for (var k = 0; k < this.playerShips.length; k++) {
-    //     for (var i = 0; i < this.playerShips.length; i++) {
-    //       if (Snap.path.isBBoxIntersect(this.playerShips[i].getBBox(), this.playerShips[k].getBBox()) === true) {
-    //         if (i !== k && i < k) {
-    //           console.log("I'm overlapping!");
-    //         }
-    //       }    
-    //     }
-    //   }
-    // }
 
     this.placeShip = function(x, y, width, type) {
       var ship;
@@ -80,29 +67,38 @@
             playerShipGroup.add(grid.canvas.rect((x * 25), (y * 25), 25, 25));   
             x++;
           }
-          playerShipGroup.drag();
+          playerShipGroup.drag(
+            function (dx, dy, x, y, e) {
+              console.log(dx,dy,x,y,'_',grid.origin.x,grid.origin.y, this);
+
+              // 3. Use xSnap and ySnap instead of hardcoded 0's
+              // var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
+              // var ySnap = Snap.snapTo(25, grid.origin.y + dy, 100000000);
+
+              for (var i = 0; i < width; i += 1) {
+                console.log('Block:', this[i]);
+                this[i].attr({
+                  x: 0,
+                  y: 0
+                });
+                // 2. Lay out x according to i
+              }
+              
+            },
+
+            function (x, y, e){
+              grid.origin.x = e.toElement.x.baseVal.value;
+              grid.origin.y = e.toElement.y.baseVal.value;
+            }
+          );
         }
         this.playerShips.push(playerShipGroup);
-        // shipGroup.drag(
-        //   function (dx, dy, x, y, e) {
-        //     var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
-        //     var ySnap = Snap.snapTo(25, grid.origin.y + dy, 100000000);
-        //     this.attr({
-        //       x: xSnap,
-        //       y: ySnap
-        //     });
-        //   },
-
-        //   function (x, y, e){
-        //     grid.origin.x = e.toElement.x.baseVal.value;
-        //     grid.origin.y = e.toElement.y.baseVal.value;
-        //   }
-        // );
+        
         
       } else {
-        if (this.availableComputerSpace[x + ',' + y] === false) {
+        if (this.availableComputerSpace[x + ',' + y] === false && this.availableComputerSpace[(x + width) + ',' + y] === false) {
           this.availableComputerSpace[x + ',' + y] = true;
-
+          this.availableComputerSpace[(x + width) + ',' + y] = true;
           var computerShipGroup = grid.canvas.group();
 
           for (var i = 0; i < width; i++) {
@@ -113,7 +109,6 @@
           this.computerShips.push(computerShipGroup);
         } else {
           console.log("I'm overlapping!");
-          
           x = util.randInt(0, 15);
           y = util.randInt(0, 15);
           this.placeShip(x, y, width, 25);
