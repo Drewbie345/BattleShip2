@@ -79,38 +79,32 @@
 
         if (this.availablePlayerSpace[x + ',' + y] === false) {
           this.availablePlayerSpace[x + ',' + y] = true; 
-          var blocks = [];
+          
+          var shipGroup = grid.canvas.group();
+          
           for (var i = 0; i < width; i++){
-            blocks[i] = grid.canvas.rect((x * 25), (y * 25), 25, 25);
+            shipGroup.add(grid.canvas.rect((x * 25), (y * 25), 25, 25));
+          
             x++;
           }
-          ship = grid.canvas.g(blocks.join(' '));
+          shipGroup.drag();
         }
-        
-        
 
-        // Mult x and y by something to get pixel size
-       
-        
-        // for (var i = 1; i < blocks + 1; i++) {
-          // x += (i * 25);
-        // }
+        // shipGroup.drag(
+        //   function (dx, dy, x, y, e) {
+        //     var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
+        //     var ySnap = Snap.snapTo(25, grid.origin.y + dy, 100000000);
+        //     this.attr({
+        //       x: xSnap,
+        //       y: ySnap
+        //     });
+        //   },
 
-        ship.drag(
-          function (dx, dy, x, y, e) {
-            var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
-            var ySnap = Snap.snapTo(25, grid.origin.y + dy, 100000000);
-            this.attr({
-              x: xSnap,
-              y: ySnap
-            });
-          },
-
-          function (x, y, e){
-            grid.origin.x = e.toElement.x.baseVal.value;
-            grid.origin.y = e.toElement.y.baseVal.value;
-          }
-        );
+        //   function (x, y, e){
+        //     grid.origin.x = e.toElement.x.baseVal.value;
+        //     grid.origin.y = e.toElement.y.baseVal.value;
+        //   }
+        // );
         this.playerShips.push(ship);
       }
       else {
