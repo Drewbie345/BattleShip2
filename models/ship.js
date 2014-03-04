@@ -6,6 +6,15 @@
 
     this.computerShips = [];
 
+    this.placeGrids = function(canvasId) {
+      var grid = grids.createGrid(canvasId);
+      return grid;
+    }
+
+    this.playerGrid = this.placeGrids('#svg1');
+
+    this.computerGrid = this.placeGrids('#svg2');
+
     this.createAvailableSpaces = function() {
       var gridArray = [];
 
@@ -41,55 +50,35 @@
       }
     }
 
-    this.placeShip = function(x, y, width, type) {
+    this.placePlayerShip = function(x, y, width) {
       var ship;
-      // var playerShipsObject = this.availableSpace();
-      //var computerShipsObject = this.availableSpace();
-      // var array = this.gridKey();
-      var svgId = '';
-      
-      if (type === 'player') {
-        svgId = '#svg1';
-      }
-      else {
-        svgId = '#svg2'
-      }
 
-      var grid = createGrid(svgId);
-      
-      if (type === 'player') {
+      var grid = this.playerGrid.canvas;
+    
         if (this.availablePlayerSpace[x + ',' + y] === false) {
           this.availablePlayerSpace[x + ',' + y] = true; 
           
-          var playerShipGroup = grid.canvas.group();
+          var playerShipGroup = grid.group();
           
           for (var i = 0; i < width; i++){
-            playerShipGroup.add(grid.canvas.rect((x * 25), (y * 25), 25, 25));   
+            playerShipGroup.add(grid.rect((x * 25), (y * 25), 25, 25));   
             x++;
           }
           playerShipGroup.drag(
             function (dx, dy, x, y, e) {
-              // console.log(dx,dy,x,y,'_',grid.origin.x,grid.origin.y, this);
-
-              // 3. Use xSnap and ySnap instead of hardcoded 0's
               var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
               var ySnap = Snap.snapTo(25, grid.origin.y + dy, 100000000);
 
               x = 0;
               var max = 400;
-              for (var i = 0; i < width; i += 1) {
-                //console.log('Block:', this[i]);
-                
+              for (var i = 0; i < width; i += 1) {                
                   this[i].attr({
                     x: xSnap,
                     y: ySnap
                   });
-                // 2. Lay out x according to i
-                
-                xSnap += 25;
-                
               }
-              
+               xSnap += 25;              
+              }  
             },
 
             function (x, y, e){
@@ -100,15 +89,23 @@
         }
         this.playerShips.push(playerShipGroup);
         
+        return {
+          playGrid: grid,
+          ship: ship
+        }
+      }
         
-      } else {
+      this.placeComputerShip = function(x, y, width) {
+        var ship;
+        var grid = this.computerGrid.canvas;
+
         if (this.availableComputerSpace[x + ',' + y] === false && this.availableComputerSpace[(x + width) + ',' + y] === false) {
           this.availableComputerSpace[x + ',' + y] = true;
           this.availableComputerSpace[(x + width) + ',' + y] = true;
-          var computerShipGroup = grid.canvas.group();
+          var computerShipGroup = grid.group();
 
           for (var i = 0; i < width; i++) {
-            computerShipGroup.add(grid.canvas.rect((x * 25), (y * 25), 25, 25));
+            computerShipGroup.add(grid.rect((x * 25), (y * 25), 25, 25));
             x++;
           }
 
@@ -117,16 +114,14 @@
           console.log("I'm overlapping!");
           x = util.randInt(0, 15);
           y = util.randInt(0, 15);
-          this.placeShip(x, y, width, 25);
+          this.placeComputerShip(x, y, width, 25);
         }
-      }
-      return {
-        grid: grid,
-        ship: ship,
-      }
+          return {
+          compGrid: grid,
+          ship: ship
+        }
+      } 
     };
-
-  };
 
   window.ships = new Ship();
 })();
