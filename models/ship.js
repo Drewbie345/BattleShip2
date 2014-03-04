@@ -69,21 +69,25 @@
           }
           playerShipGroup.drag(
             function (dx, dy, x, y, e) {
-              console.log(dx,dy,x,y,'_',grid.origin.x,grid.origin.y, this);
+              // console.log(dx,dy,x,y,'_',grid.origin.x,grid.origin.y, this);
 
               // 3. Use xSnap and ySnap instead of hardcoded 0's
               var xSnap = Snap.snapTo(25, grid.origin.x + dx, 100000000);
               var ySnap = Snap.snapTo(25, grid.origin.y + dy, 100000000);
 
               x = 0;
+              var max = 400;
               for (var i = 0; i < width; i += 1) {
-                console.log('Block:', this[i]);
-                this[i].attr({
-                  x: xSnap,
-                  y: ySnap
-                });
+                //console.log('Block:', this[i]);
+                
+                  this[i].attr({
+                    x: xSnap,
+                    y: ySnap
+                  });
                 // 2. Lay out x according to i
+                
                 xSnap += 25;
+                
               }
               
             },

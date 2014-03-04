@@ -7,17 +7,18 @@ var createGrid = function(canvasId){
   };
 
   var boxes = [];
-  for (var i = 0; i <= 375; i += 25) {
+  for (var i = 0; i <= 400; i += 25) {
     for (var k = 0; k <= 400; k += 25) {
-      var m = 25 + i;
-      var box = s.path('M'+ i +',' + k + 'L' + m + ',' + k + 'L' + m + ',' + m + 'L' + i + ',' + m + ',z');
+      var box = s.path('M'+ i + ',' + k + 'L' + (i+25) + ',' + k + 'L' + (i+25) + ',' + (k+25) + 'L' + i + ',' + (k+25) + ',z');
       box.attr({
         fill: 'none',
         stroke: 'black',
         strokeWidth: 2
       })
       boxes.push(box);
+      
     }
+    
   }
   return {
     canvas: s,
